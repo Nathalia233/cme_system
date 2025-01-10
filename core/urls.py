@@ -1,14 +1,13 @@
-from django.urls import path, include # type: ignore
-from rest_framework.routers import DefaultRouter # type: ignore
-from .views import UserViewSet, ProcessoViewSet
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserViewSet, ProcessoViewSet, RastreabilidadeViewSet, FalhaViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'processos', ProcessoViewSet)
+router.register(r'rastreabilidade', RastreabilidadeViewSet)
+router.register(r'falhas', FalhaViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    ...
+    path('api/', include(router.urls)),  # Prefixo api/ para todas as rotas
 ]
