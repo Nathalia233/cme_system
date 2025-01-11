@@ -2,8 +2,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import User, Processo, Rastreabilidade, Falha
-from .serializers import UserSerializer, ProcessoSerializer, RastreabilidadeSerializer, FalhaSerializer
+from .models import Material, User, Processo, Rastreabilidade, Falha
+from .serializers import UserSerializer, ProcessoSerializer, RastreabilidadeSerializer, FalhaSerializer,  MaterialSerializer
 from .permissions import IsAdmin, IsNursing, IsTechnical
 
 # ViewSet para o modelo de usuários
@@ -50,3 +50,12 @@ class FalhaViewSet(viewsets.ModelViewSet):
     queryset = Falha.objects.all()
     serializer_class = FalhaSerializer
     permission_classes = [IsAuthenticated, IsNursing]  # Apenas Enfermagem pode acessar
+
+class MaterialViewSet(viewsets.ModelViewSet):
+    
+    # Define o queryset que será utilizado para buscar os materiais
+    queryset = Material.objects.all()
+    # Define o serializer que será usado para a validação e serialização dos dados
+    serializer_class = MaterialSerializer
+    # Permite apenas usuários autenticados acessarem as rotas deste ViewSet
+    permission_classes = [IsAuthenticated]

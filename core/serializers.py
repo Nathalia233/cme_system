@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Processo, Rastreabilidade, Falha
+from .models import User, Processo, Rastreabilidade, Falha, Material
 
 # Serializer para o modelo de usuário
 class UserSerializer(serializers.ModelSerializer):
@@ -28,3 +28,12 @@ class FalhaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Falha
         fields = ['id', 'processo', 'descricao', 'usuario', 'data_ocorrencia']
+
+
+class MaterialSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Material
+        # Define os campos que serão serializados
+        fields = ['id', 'nome', 'tipo', 'data_validade', 'serial']
+        
