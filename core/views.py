@@ -2,9 +2,15 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from .models import Material, User, Processo, Rastreabilidade, Falha
 from .serializers import UserSerializer, ProcessoSerializer, RastreabilidadeSerializer, FalhaSerializer,  MaterialSerializer
 from .permissions import IsAdmin, IsNursing, IsTechnical
+from django.http import HttpResponse
+import openpyxl
+from io import BytesIO
+from reportlab.pdfgen import canvas
+
 
 # ViewSet para o modelo de usuários
 class UserViewSet(viewsets.ModelViewSet):
@@ -59,3 +65,53 @@ class MaterialViewSet(viewsets.ModelViewSet):
     serializer_class = MaterialSerializer
     # Permite apenas usuários autenticados acessarem as rotas deste ViewSet
     permission_classes = [IsAuthenticated]
+    
+
+# Endpoint para listar etapas por serial
+class RastreabilidadeListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serial = request.query_params.get('serial', None)
+        if serial:
+            rastreabilidade = Rastreabilidade.objects.filter(serial=serial)
+        else:
+            rastreabilidade = Rastreabilidade.objects.all()
+        serializer = RastreabilidadeSerializer(rastreabilidade, many=True)
+        return Response(serializer.data)
+
+# Endpoint para relatórios em PDF
+class RastreabilidadePDFReportView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serials = Rastreabilidade.objects.all()
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        pdf.drawString(100, 800, "Relatório de Rastreabilidade")
+        y = 750
+        for serial in serials:
+            pdf.drawString(100, y, f"Serial: {serial.serial} | Etapas: {serial.etapas} | Falhas: {serial.falhas}")
+            y -= 20
+        pdf.save()
+        buffer.seek(0)
+        return HttpResponse(buffer, content_type='application/pdf')
+
+# Endpoint para relatórios em XLSX
+class RastreabilidadeXLSXReportView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serials = Rastreabilidade.objects.all()
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        sheet.title = "Rastreabilidade"
+        sheet.append(["Serial", "Etapas", "Falhas"])
+
+        for serial in serials:
+            sheet.append([serial.serial, serial.etapas, serial.falhas])
+
+        buffer = BytesIO()
+        workbook.save(buffer)
+        buffer.seek(0)
+        return HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
