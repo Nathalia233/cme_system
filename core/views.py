@@ -115,3 +115,8 @@ class RastreabilidadeXLSXReportView(APIView):
         workbook.save(buffer)
         buffer.seek(0)
         return HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    
+class RastreabilidadeViewSet(viewsets.ModelViewSet):
+    queryset = Rastreabilidade.objects.all()
+    serializer_class = RastreabilidadeSerializer
+    permission_classes = [IsAuthenticated]

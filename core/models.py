@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
+from django.utils import timezone
+
 
 # Modelo de Usuário Customizado
 class User(AbstractUser):
@@ -102,3 +104,39 @@ class Etapa(models.Model):
 
     def __str__(self):
         return self.nome
+
+class Rastreabilidade(models.Model):
+    material = models.ForeignKey('Material', on_delete=models.CASCADE)
+    etapa = models.ForeignKey('Etapa', on_delete=models.CASCADE)
+    data_inicio = models.DateTimeField(default=timezone.now)
+    data_fim = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=100, choices=[('Em andamento', 'Em andamento'), ('Finalizado', 'Finalizado')], default='Em andamento')
+
+    def __str__(self):
+        return f"Material {self.material.nome} - Etapa {self.etapa.nome}"
+
+    def finalizar(self):
+        self.status = 'Finalizado'
+        self.data_fim = timezone.now()
+        self.save()
+
+    def reiniciar(self):
+        """Reinicia o processo para o material."""
+        self.status = 'Em andamento'
+        self.data_fim = None
+        self.save()
+        
+# Exemplo de função que avança uma etapa para um material
+def avancar_etapa(material):
+    # Busca a próxima etapa no processo
+    etapa_atual = material.etapas.filter(status='Em andamento').first()
+    if etapa_atual:
+        # Criar uma nova entrada de rastreabilidade
+        rastreabilidade = Rastreabilidade.objects.create(
+            material=material,
+            etapa=etapa_atual
+        )
+        # Marcar a etapa atual como finalizada
+        etapa_atual.finalizar()
+        return rastreabilidade
+    return None
