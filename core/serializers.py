@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import User, Processo, Rastreabilidade, Falha, Material
+from .models import CustomUser, Processo, Rastreabilidade, Falha, Material
 
 # Serializer para o modelo de usuário
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password']
         extra_kwargs = {
             'password': {'write_only': True}

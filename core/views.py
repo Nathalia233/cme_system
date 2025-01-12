@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import Material, User, Processo, Rastreabilidade, Falha
+from .models import Material, CustomUser, Processo, Rastreabilidade, Falha
 from .serializers import UserSerializer, ProcessoSerializer, RastreabilidadeSerializer, FalhaSerializer,  MaterialSerializer
 from .permissions import IsAdmin, IsNursing, IsTechnical
 from django.http import HttpResponse
@@ -14,7 +14,7 @@ from reportlab.pdfgen import canvas
 
 # ViewSet para o modelo de usuários
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]  # Apenas usuários autenticados podem acessar
 
@@ -32,7 +32,7 @@ class UserViewSet(viewsets.ModelViewSet):
  # Endpoint de cadastro customizado
     def create(self, request, *args, **kwargs):
         # Verifica se o email já existe
-        if User.objects.filter(email=request.data.get("email")).exists():
+        if CustomUser.objects.filter(email=request.data.get("email")).exists():
             return Response({"error": "Email already exists."}, status=status.HTTP_400_BAD_REQUEST)
         
         # Criação do usuário via serializer

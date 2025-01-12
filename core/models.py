@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 # Modelo de Usuário Customizado
-class User(AbstractUser):
+class CustomUser(AbstractUser):
     TECHNICAL = 'Técnico'
     NURSING = 'Enfermagem'
     ADMINISTRATIVE = 'Administrativo'
@@ -46,7 +46,7 @@ class Processo(models.Model):
 # Modelo de Rastreabilidade
 class Rastreabilidade(models.Model):
     processo = models.ForeignKey(Processo, related_name='rastreabilidade', on_delete=models.CASCADE)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     acao = models.CharField(max_length=255)
     data = models.DateTimeField(auto_now_add=True)
 
@@ -57,7 +57,7 @@ class Rastreabilidade(models.Model):
 class Falha(models.Model):
     processo = models.ForeignKey(Processo, related_name='falhas', on_delete=models.CASCADE)
     descricao = models.TextField()
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     data_ocorrencia = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

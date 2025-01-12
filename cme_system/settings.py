@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',
+    'core.apps.CoreConfig',
 ]
 
 # Configuração do JWT
@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'cme_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': "django.db.backends.postgresql",
+        'NAME': "postgres",
+        'USER': "postgres",
+        'PASSWORD':"2552231090",
+        'HOST': "localhost",
+        'PORT': "5432",
     }
 }
 
@@ -130,7 +134,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'core.CustomUser'
 
 # Configurações de JWT
 REST_FRAMEWORK = {
@@ -138,3 +142,4 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+
