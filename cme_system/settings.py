@@ -62,7 +62,9 @@ ROOT_URLCONF = 'cme_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',  # ou o caminho para o seu diretório de templates
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,8 +140,20 @@ AUTH_USER_MODEL = 'core.CustomUser'
 
 # Configurações de JWT
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
     ],
 }
 
+INSTALLED_APPS += [
+    'corsheaders',
+    'rest_framework',
+]
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    *MIDDLEWARE,
+]
+
+# Permitir todas as origens durante o desenvolvimento
+CORS_ALLOW_ALL_ORIGINS = True

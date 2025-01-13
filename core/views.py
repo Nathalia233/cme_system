@@ -3,6 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework import serializers
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Material, CustomUser, Processo, Rastreabilidade, Falha
 from .serializers import UserSerializer, ProcessoSerializer, RastreabilidadeSerializer, FalhaSerializer,  MaterialSerializer
 from .permissions import IsAdmin, IsNursing, IsTechnical
@@ -10,7 +12,6 @@ from django.http import HttpResponse
 import openpyxl
 from io import BytesIO
 from reportlab.pdfgen import canvas
-
 
 # ViewSet para o modelo de usuários
 class UserViewSet(viewsets.ModelViewSet):
@@ -120,3 +121,21 @@ class RastreabilidadeViewSet(viewsets.ModelViewSet):
     queryset = Rastreabilidade.objects.all()
     serializer_class = RastreabilidadeSerializer
     permission_classes = [IsAuthenticated]
+
+class CustomTokenObtainPairSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+
+        if email and password:
+            user =CustomUser(email=email).first()
+            if user and user.check_password(password):
+                attrs['user'] = user
+                return attrs
+        raise serializers.ValidationError("Credenciais inválidas.")
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
