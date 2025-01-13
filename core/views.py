@@ -13,6 +13,27 @@ import openpyxl
 from io import BytesIO
 from reportlab.pdfgen import canvas
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+
+@api_view(['POST'])
+def create_user(request):
+    data = request.data
+    try:
+        user = User.objects.create(
+            username=data['username'],
+            email=data['email'],
+            password=make_password(data['password']),
+            is_staff=(data['role'] == 'administrativo')
+        )
+        user.save()
+        return Response({"message": "Usuário criado com sucesso"}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 # ViewSet para o modelo de usuários
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()

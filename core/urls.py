@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import UserViewSet, ProcessoViewSet, RastreabilidadeViewSet, FalhaViewSet, MaterialViewSet, RastreabilidadeListView, RastreabilidadePDFReportView, RastreabilidadeXLSXReportView
+from .views import UserViewSet, ProcessoViewSet, RastreabilidadeViewSet, FalhaViewSet, MaterialViewSet, RastreabilidadeListView, RastreabilidadePDFReportView, RastreabilidadeXLSXReportView, create_user
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -17,4 +17,6 @@ urlpatterns = [
     path('api/rastreabilidade/', RastreabilidadeListView.as_view(), name='rastreabilidade-list'),
     path('api/rastreabilidade/pdf/', RastreabilidadePDFReportView.as_view(), name='rastreabilidade-pdf'),
     path('api/rastreabilidade/xlsx/', RastreabilidadeXLSXReportView.as_view(), name='rastreabilidade-xlsx'),
+    path('api/users/', create_user, name='create_user'), 
 ]
+
