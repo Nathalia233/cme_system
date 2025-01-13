@@ -1,0 +1,95 @@
+Sistema de CME - Central de Materiais e Esterilização
+Introdução
+A empresa Grupo Bringel está buscando um desenvolvedor talentoso para aprimorar o sistema de CME. O sistema ajuda no controle e rastreabilidade de materiais que são esterilizados e distribuídos.
+
+Tecnologias Utilizadas
+Backend: Python (Django)
+
+Frontend: React
+
+Banco de Dados: PostgreSQL
+
+Configuração do Ambiente
+Backend (Django)
+Clone o repositório:
+
+bash
+git clone https://github.com/Nathalia233/cme_system
+Instale as dependências do backend:
+
+bash
+pip install -r requirements.txt
+Configure as variáveis de ambiente:
+
+bash
+export SECRET_KEY='sua_chave_secreta'
+export DATABASE_URL='sua_url_do_banco'
+Execute as migrações:
+
+bash
+python manage.py migrate
+Inicie o servidor backend:
+
+bash
+python manage.py runserver
+Frontend (React)
+Navegue até o diretório do frontend:
+
+bash
+cd frontend
+Instale as dependências do frontend:
+
+bash
+npm install
+Inicie o servidor frontend:
+
+bash
+npm start
+
+Funcionalidades
+1. Cadastro de Usuários
+Tipos de Usuário:
+Usuário Técnico: Responsável por realizar as etapas do processo.
+
+Usuário Enfermagem: Verifica a rastreabilidade do processo e consulta falhas e relatórios.
+
+Usuário Administrativo: Cadastra novos usuários e atribui funções.
+
+2. Cadastro de Materiais a Serem Esterilizados
+Nome do material
+
+Tipo do material
+
+Data de validade
+
+Serial: Gerado automaticamente de acordo com o nome do material.
+
+3. Rastreabilidade
+Mostrar as etapas que um serial passou, podendo filtrar por um serial específico ou visualizar todos.
+
+Mostrar as falhas ocorridas naquele serial e quantas vezes o serial passou por um processo.
+
+Gerar um relatório em PDF e XLSX dos seriais que passaram por todos os processos, incluindo falhas.
+
+Etapas do Processo
+Recebimento: Recebimento dos materiais dos diversos setores do hospital.
+
+Lavagem: Lavagem dos materiais.
+
+Esterilização: Esterilização dos materiais cirúrgicos com alta temperatura.
+
+Distribuição: Distribuição dos materiais cirúrgicos para os diversos setores do hospital.
+
+Usabilidade
+A interface da aplicação é intuitiva e fácil de usar.
+
+Código
+O código foi escrito de forma organizada e bem documentada, seguindo as melhores práticas de desenvolvimento.
+
+Documentação
+Todas as funcionalidades foram documentadas, descrevendo como elas funcionam e o raciocínio por trás das implementações.
+
+Requisitos do Projeto
+O sistema foi desenvolvido usando React no frontend e Python (Django) no backend.
+
+A aplicação foi entregue como um projeto no GitHub.
